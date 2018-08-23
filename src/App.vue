@@ -1,28 +1,33 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <!-- App -->
+  <f7-app :params="f7params">
+    <f7-statusbar></f7-statusbar>
+    <!-- initial page is specified in routes -->
+    <f7-view main url="/"></f7-view>
+  </f7-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue';
+
+import routes from './routes';
 
 export default {
-  name: 'app',
-  components: {
-    HelloWorld
+  data() {
+    return {
+      // Framework7 parameters that we pass to <f7-app> component
+      f7params: {
+        // Array with app routes
+        routes,
+        // App Name
+        name: '格尔智慧',
+        // App id
+        id: 'com.myapp.test',
+        // ...
+      }
+    }
   }
 };
 </script>
-
 <style lang="less">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+@import './less/app';
 </style>
