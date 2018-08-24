@@ -8,32 +8,36 @@
     </f7-navbar>
 
     <f7-block>
-      <p>登录成功！</p>
-      <p>你可以 <f7-link back>返回</f7-link></p>
+      <f7-block-title>登录成功</f7-block-title>
+
+      <f7-list simple-list>
+        <f7-list-item>
+          <p>{{token}}</p>
+        </f7-list-item>
+        <f7-list-item>
+          <f7-link back>返回</f7-link>
+        </f7-list-item>
+        <f7-list-item>
+          <f7-link @click="pwdPopupOpened = true">设置密码</f7-link>
+        </f7-list-item>
+        
+      </f7-list>
+
     </f7-block>
 
     <f7-list>
       <f7-list-button color="red">退出登录</f7-list-button>
     </f7-list>
 
-    <f7-toolbar tabbar labels>
+    <f7-toolbar tabbar labels :bottom-md="true">
       <f7-link tab-link="#tab-1" tab-link-active>
-        <f7-icon class="icon-fill" ios="f7:email_fill" md="material:email">
-          <f7-badge color="green">5</f7-badge>
-        </f7-icon>
-        <span class="tabbar-label">Inbox</span>
+        <span class="tabbar-label">1111</span>
       </f7-link>
       <f7-link tab-link="#tab-2">
-        <f7-icon ios="f7:today" md="material:today">
-          <f7-badge color="red">7</f7-badge>
-        </f7-icon>
-        <span class="tabbar-label">Calendar</span>
+        <span class="tabbar-label">2222</span>
       </f7-link>
       <f7-link tab-link="#tab-3">
-        <f7-icon ios="f7:cloud" md="material:file_upload">
-          <f7-badge color="red">1</f7-badge>
-        </f7-icon>
-        <span class="tabbar-label">Upload</span>
+        <span class="tabbar-label">333</span>
       </f7-link>
     </f7-toolbar>
 
@@ -41,13 +45,11 @@
       <f7-page>
         <f7-navbar title="设置密码">
           <f7-nav-right>
-            <f7-link popup-close>跳过</f7-link>
+            <f7-link popup-close>取消</f7-link>
           </f7-nav-right>
         </f7-navbar>
         <f7-block>
-          <p>Here comes popup. You can put here anything, even independent view with its own navigation. Also not, that by default popup looks a bit different on iPhone/iPod and iPad, on iPhone it is fullscreen.</p>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
-          <p>Duis ut mauris sollicitudin, venenatis nisi sed, luctus ligula...</p>
+          <p>设置密码</p>
         </f7-block>
       </f7-page>
     </f7-popup>
@@ -55,9 +57,10 @@
 </template>
 <script>
 export default {
-  data () {
+  data() {
     return {
-      pwdPopupOpened: false
+      pwdPopupOpened: false,
+      token: sessionStorage.loginToken
     }
   }
 }

@@ -1,6 +1,7 @@
-import framework7 from 'framework7';
+import axios from 'axios';
 
-console.log(framework7);
+import { getUrlQuery } from './util';
+
 /**
  * 发起一次ajax请求
  * @param {string} url api url
@@ -9,6 +10,10 @@ console.log(framework7);
  * @param {any} config 配置参数
  */
 const fetch = async (url, params = {}, type = 'get', config = {}) => {
+  const urlQuery = getUrlQuery();
+  params.channel = urlQuery.channel || 'goalwisdom';
+  params.product = urlQuery.channel || 'bihuyihu';
+
   type = type.toLowerCase();
   if (!url) {
     return {
@@ -18,19 +23,40 @@ const fetch = async (url, params = {}, type = 'get', config = {}) => {
   // 设定参数
   let options = {
     method: type,
-    url: localStorage.REST_BASE_URL + '/gwecs' + url
+    url: window.REST_BASE_URL + url,
+    timeout: 6000
   };
   // get params or post data
   if (type === 'get') {
-    // 不显示全屏加载
     options.params = params;
   } else {
     options.data = params;
+    options.transformRequest = [
+      function(data) {
+        let ret = '';
+        for (let it in data) {
+          if (it && data[it]) {
+            if (ret) {
+              ret += '&';
+            }
+            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]);
+          }
+        }
+        return ret;
+      }
+    ];
+    options.headers = {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    };
   }
-  
+
+  // lock loading
+  if (config.lock) {
+    console.log(config);
+  }
 
   try {
-    const response = await Framework7.request(options);
+    const response = await axios(options);
     return response.data;
   } catch (e) {
     return {
@@ -39,6 +65,5 @@ const fetch = async (url, params = {}, type = 'get', config = {}) => {
     };
   }
 };
-
 
 export default fetch;

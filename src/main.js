@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import App from './App.vue';
 import './registerServiceWorker';
-import axios from 'axios';
+import service from './service';
 
 // Import App Custom Styles
 import 'framework7/css/framework7.min.css';
@@ -15,6 +15,26 @@ import Framework7Vue from 'framework7-vue/framework7-vue.esm.bundle.js';
 
 // Init F7-Vue Plugin
 Framework7.use(Framework7Vue);
+
+// msg plugin
+Vue.prototype.$toast = function(msg, config = {}) {
+  const app = this.$f7;
+  let icon = null;
+  if (config.icon) {
+    icon = app.theme === 'ios' ? `<i class="f7-icons">${config.icon}</i>` : `<i class="material-icons">${config.icon}</i>`;
+  }
+  const toast = app.toast.create({
+    icon: icon,
+    text: msg,
+    position: config.position || 'center',
+    closeTimeout: config.duration || 3000,
+  });
+  toast.open();
+};
+
+// service 注入
+// console.log()
+Vue.prototype.$service = service;
 
 Vue.config.productionTip = false;
 
