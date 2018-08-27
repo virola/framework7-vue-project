@@ -31,10 +31,6 @@
       </f7-list-item>
     </f7-list>
 
-    <f7-toolbar>
-      <f7-link></f7-link>
-      
-    </f7-toolbar>
   </f7-page>
 </template>
 
@@ -56,7 +52,7 @@ export default {
       // 手机号验证
       const regex = /^1[0-9]{10}$/;
       if (!regex.test(self.telephone)) {
-        self.$toast('请输入正确的手机号码');
+        self.$toast('请输入正确的手机号');
         self.$refs.inputTelephone.focus();
         return;
       }
