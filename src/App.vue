@@ -44,8 +44,9 @@ export default {
   mounted() {}
 };
 </script>
+<style src="../node_modules/framework7/css/framework7.min.css"></style>
+<style src="../node_modules/framework7-icons/css/framework7-icons.css"></style>
+
 <style lang="less">
-@import '/node_modules/framework7/css/framework7.min.css';
-@import '/node_modules/framework7-icons/css/framework7-icons.css';
 @import './less/app';
 </style>

@@ -53,6 +53,7 @@ export default {
       // const router = self.$f7router;
 
       if (self.telephone && self.code) {
+        self.errorMsg = '';
         const form = {
           telephone: self.telephone,
           code: self.code
@@ -81,6 +82,7 @@ export default {
         return;
       }
       if (self.telephone) {
+        self.errorMsg = '';
         // const resp = { code: 1 };
         const resp = await self.$service.getLoginCode(self.telephone);
         console.log(resp);
@@ -96,7 +98,7 @@ export default {
             }
           }, 1000);
         } else {
-          self.$toast(`请求错误`);
+          self.$toast(resp.msg);
           self.errorMsg = resp.msg;
         }
       }

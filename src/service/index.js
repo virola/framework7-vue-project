@@ -18,7 +18,9 @@ const API_URL = {
   // 忘记密码获取验证码
   GET_RESET_PWD_CODE: '/customer/access/send_forgot_password_sms_code',
   // 重设密码
-  POST_RESET_PWD_BY_CODE: '/customer/access/forget_password'
+  POST_RESET_PWD_BY_CODE: '/customer/access/forget_password',
+  // 登陆后设置初始密码
+  POST_SET_INIT_PWD: '/TODO'
 };
 
 export default {
@@ -99,5 +101,13 @@ export default {
       },
       'post'
     );
+  },
+
+  /**
+   * 修改用户的初始密码
+   * @param {string} password 用户设置的密码 
+   */
+  setInitPassword(password) {
+    return fetch(API_URL.POST_SET_INIT_PWD, { password: md5(password) }, 'post');
   }
 };

@@ -84,6 +84,7 @@ export default {
         return;
       }
       if (self.telephone) {
+        self.errorMsg = '';
         // const resp = { code: 1 };
         const resp = await self.$service.getResetPwdCode(self.telephone);
         console.log(resp);
@@ -99,6 +100,7 @@ export default {
             }
           }, 1000);
         } else {
+          self.$toast(resp.msg);
           self.errorMsg = resp.msg;
         }
       }

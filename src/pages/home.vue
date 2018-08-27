@@ -1,8 +1,7 @@
 <template>
   <f7-page name="main">
 
-    <f7-navbar title="格尔智慧">
-    </f7-navbar>
+    <f7-navbar title="格尔智慧" :sliding="false"></f7-navbar>
 
     <f7-block>
       <f7-block-title>登录成功</f7-block-title>
@@ -31,7 +30,22 @@
           </f7-nav-right>
         </f7-navbar>
         <f7-block>
-          <p>设置密码</p>
+          <f7-list form>
+            <f7-list-item>
+              <input type="password" placeholder="新密码" @input="password = $event.target.value">
+            </f7-list-item>
+            <f7-list-item>
+              <input type="password" placeholder="确认密码" @input="confirmPassword = $event.target.value">
+            </f7-list-item>
+          </f7-list>
+          <f7-block text-color="red" v-show="errorMsgPwd">
+            <p>{{errorMsgPwd}}</p>
+          </f7-block>
+
+          <f7-list>
+            <f7-list-button @click="setPwd">设置密码</f7-list-button>
+          </f7-list>
+
         </f7-block>
       </f7-page>
     </f7-popup>
@@ -57,7 +71,11 @@ export default {
     return {
       pwdPopupOpened: false,
       mobilePopupOpened: false,
-      token: sessionStorage.loginToken
+      token: sessionStorage.loginToken,
+      // 设置密码dialog
+      password: '',
+      confirmPassword: '',
+      errorMsgPwd: ''
     };
   },
   methods: {
@@ -74,7 +92,29 @@ export default {
         // self.$toast(resp.msg);
         app.dialog.alert(resp.msg);
       }
+    },
+    // 设置新密码
+    async setPwd() {
+      const self = this;
+      const app = self.$f7;
+      if (!self.password) {
+        self.errorMsgPwd = '请输入密码';
+        return;
+      }
+      if (self.confirmPassword !== self.password) {
+        self.errorMsgPwd = '两次密码输入不一致';
+        return;
+      }
+      self.errorMsgPwd = '';
+      const resp = await this.$service.setInitPassword(self.password);
+      console.log(resp);
+      if (resp.status == 0) {
+        self.pwdPopupOpened = false;
+        app.dialog.alert(resp.msg);
+      } else {
+        app.dialog.alert(resp.msg);
+      }
     }
   }
-}
+};
 </script>

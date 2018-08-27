@@ -34,7 +34,10 @@ const fetch = async (url, params = {}, type = 'get', config = {}) => {
   let options = {
     method: type,
     url: window.REST_BASE_URL + url,
-    timeout: 10 * 1000
+    timeout: 10 * 1000,
+    headers: {
+      access_token: sessionStorage.loginToken || ''
+    }
   };
   // get params or post data
   if (type === 'get') {
@@ -56,9 +59,7 @@ const fetch = async (url, params = {}, type = 'get', config = {}) => {
         return ret;
       }
     ];
-    options.headers = {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    };
+    options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
   }
 
   // lock loading
