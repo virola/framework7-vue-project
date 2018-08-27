@@ -4,29 +4,47 @@ import register from '@/pages/register';
 import home from '@/pages/home';
 import resetPassword from '@/pages/resetPassword';
 
+import NotFound from '@/pages/404';
+
 export default [
   {
-    path: '/',
-    redirect: 'login'
+    path: '#/',
+    component: login
+    // redirect: function(route, resolve) {
+    //   console.log(route);
+    //   if (sessionStorage.loginToken) {
+    //     // redirect to such url
+    //     resolve('/home/');
+    //   } else {
+    //     resolve('/login/')
+    //   }
+    // }
   },
   {
-    path: '/login',
+    path: '#/login/',
     component: login
   },
   {
-    path: '/loginBySMS',
+    path: '#/loginBySMS/',
     component: loginBySMS
   },
   {
-    path: '/register',
+    path: '#/register/',
     component: register
   },
   {
-    path: '/home',
+    path: '#/resetPassword/',
+    component: resetPassword
+  },
+  // 登录成功后主页
+  {
+    path: '#/home/',
     component: home
   },
+
+  // 404 not found
   {
-    path: '/resetPassword',
-    component: resetPassword
+    path: '#(.*)',
+    component: NotFound
   }
 ];

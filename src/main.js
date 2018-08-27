@@ -2,6 +2,8 @@ import Vue from 'vue';
 import App from './App.vue';
 import './registerServiceWorker';
 import service from './service';
+import fetch from './service/fetch';
+import router from './router';
 
 // Import App Custom Styles
 import 'framework7/css/framework7.min.css';
@@ -21,23 +23,26 @@ Vue.prototype.$toast = function(msg, config = {}) {
   const app = this.$f7;
   let icon = null;
   if (config.icon) {
-    icon = app.theme === 'ios' ? `<i class="f7-icons">${config.icon}</i>` : `<i class="material-icons">${config.icon}</i>`;
+    icon =
+      app.theme === 'ios' ? `<i class="f7-icons">${config.icon}</i>` : `<i class="material-icons">${config.icon}</i>`;
   }
   const toast = app.toast.create({
     icon: icon,
     text: msg,
     position: config.position || 'center',
-    closeTimeout: config.duration || 3000,
+    closeTimeout: config.duration || 3000
   });
   toast.open();
 };
 
 // service 注入
-// console.log()
 Vue.prototype.$service = service;
+Vue.prototype.$fetch = fetch;
 
 Vue.config.productionTip = false;
 
+// Init App
 new Vue({
-  render: h => h(App)
+  router,
+  render: h => h(App),
 }).$mount('#app');

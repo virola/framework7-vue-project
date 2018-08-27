@@ -1,6 +1,8 @@
 import axios from 'axios';
+import Framework7 from 'framework7/framework7.esm.bundle.js';
 
-import { getUrlQuery } from './util';
+// 使用框架组件
+const app = new Framework7();
 
 /**
  * 发起一次ajax请求
@@ -10,7 +12,8 @@ import { getUrlQuery } from './util';
  * @param {any} config 配置参数
  */
 const fetch = async (url, params = {}, type = 'get', config = {}) => {
-  const urlQuery = getUrlQuery();
+  // let loadingToast;
+  const urlQuery = Framework7.utils.parseUrlQuery();
   params.channel = urlQuery.channel || 'goalwisdom';
   params.product = urlQuery.channel || 'bihuyihu';
 
@@ -20,17 +23,25 @@ const fetch = async (url, params = {}, type = 'get', config = {}) => {
       msg: '请求API错误'
     };
   }
+  if (!config.noLoading) {
+    // loadingToast = app.toast.show({
+    //   text: '加载中',
+    //   position: 'center'
+    // });
+    app.dialog.preloader('加载中');
+  }
   // 设定参数
   let options = {
     method: type,
     url: window.REST_BASE_URL + url,
-    timeout: 6000
+    timeout: 10 * 1000
   };
   // get params or post data
   if (type === 'get') {
     options.params = params;
   } else {
     options.data = params;
+    // 把POST数据改成FORM形式的数据提交
     options.transformRequest = [
       function(data) {
         let ret = '';
@@ -55,15 +66,48 @@ const fetch = async (url, params = {}, type = 'get', config = {}) => {
     console.log(config);
   }
 
-  try {
-    const response = await axios(options);
-    return response.data;
-  } catch (e) {
-    return {
-      error: e,
-      msg: '请求失败'
-    };
-  }
+  return axios(options)
+    .then(response => {
+      app.dialog.close();
+      // loadingToast && loadingToast.close();
+      console.log(response);
+      let resData = {};
+      if (response.data) {
+        // 判断请求成功和失败的标识
+        const code = response.data.code;
+        if (code == 0) {
+          // 请求数据成功
+          resData = {
+            status: 0,
+            data: response.data.data,
+            msg: response.data.description
+          };
+        } else {
+          // 请求数据失败
+          resData = {
+            status: code,
+            data: response.data.data,
+            msg: response.data.description
+          };
+        }
+      }
+      return resData;
+    })
+    .catch(() => {
+      app.dialog.close();
+      // console.log(error);
+      // loadingToast && loadingToast.close();
+      // 请求错误
+      app.toast.show({
+        text: `请求错误`,
+        position: 'center',
+        closeTimeout: 3000
+      });
+      return {
+        status: 500,
+        msg: '请求错误'
+      };
+    });
 };
 
 export default fetch;

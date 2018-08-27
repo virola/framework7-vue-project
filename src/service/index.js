@@ -1,4 +1,6 @@
+import md5 from 'md5';
 import fetch from './fetch';
+
 
 const API_URL = {
   // 手机号和密码登录
@@ -24,7 +26,7 @@ export default {
    * 用户名密码登录接口
    */
   loginByPwd({ telephone, password }) {
-    return fetch(API_URL.LOGIN_BY_PWD, { mobileNo: telephone, password }, 'post');
+    return fetch(API_URL.LOGIN_BY_PWD, { mobileNo: telephone, password: md5(password) }, 'post');
   },
 
   /**
@@ -32,7 +34,7 @@ export default {
    * @param {Object} params 手机号，验证码
    */
   loginByCode({ telephone, code }) {
-    return fetch(API_URL.LOGIN_BY_SMS, { telephone, code }, 'post');
+    return fetch(API_URL.LOGIN_BY_SMS, { mobileNo: telephone, smsCode: code }, 'post');
   },
 
   /**
@@ -50,6 +52,12 @@ export default {
     return fetch(API_URL.GET_REG_SMS_CODE, { mobileNo: telephone });
   },
 
+  /**
+   * 获取忘记密码短信验证码
+   */
+  getResetPwdCode(telephone) {
+    return fetch(API_URL.GET_RESET_PWD_CODE, { mobileNo: telephone });
+  },
   /**
    * 手机号注册并登录
    */
@@ -74,7 +82,7 @@ export default {
       {
         mobileNo: telephone,
         smsCode: code,
-        userPass: password
+        userPass: md5(password)
       },
       'post'
     );
